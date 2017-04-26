@@ -1,0 +1,9 @@
+---
+
+- name: Restart Web service
+  service:
+    name: "{{ gitweb_service }}"
+    state: restarted
+  when: >
+    gitweb_service != None and
+    gitweb_service_restart

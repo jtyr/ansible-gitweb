@@ -1,0 +1,29 @@
+---
+
+- name: Install GitWeb package
+  package:
+    name: "{{ gitweb_pkg }}"
+  notify:
+    - Restart Web service
+  tags:
+    - gitweb_pkg
+
+- name: Configure GitWeb
+  template:
+    src: gitweb.conf.j2
+    dest: "{{ gitweb_config_path }}"
+  notify:
+    - Restart Web service
+  tags:
+    - gitweb_config
+
+- name: Configure Apache include for GitWeb
+  template:
+    src: git.conf.j2
+    dest: "{{ gitweb_apache_config_path }}"
+  when: >
+    gitweb_service in ['apache', 'httpd']
+  notify:
+    - Restart Web service
+  tags:
+    - gitweb_config
